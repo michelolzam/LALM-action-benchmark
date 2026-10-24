@@ -3,9 +3,6 @@
 [![Paper](https://img.shields.io/badge/arXiv-2609.35345-b31b1b.svg)](https://arxiv.org/abs/2609.35345)
 [![Website](https://img.shields.io/badge/companion-website-blue)](https://alm-sounding-actions.onrender.com/)
 
-**Paper:** https://arxiv.org/abs/2609.35345 (placeholder) ·
-**Website:** https://alm-sounding-actions.onrender.com/
-
 This repository rebuilds the benchmark of the paper from the original
 [Ego4D](https://ego4d-data.org/) and [Ego-Exo4D](https://ego-exo4d-data.org/)
 videos, and provides the environments of the audio-language models we evaluated.
