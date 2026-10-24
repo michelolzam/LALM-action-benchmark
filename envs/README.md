@@ -1,7 +1,6 @@
 # Environments of the evaluated models
 
-**Paper:** https://arxiv.org/abs/XXXX.XXXXX (placeholder) ·
-**Dataset:** https://huggingface.co/datasets/ORG/alm-sounding-actions (placeholder)
+**Paper:** https://arxiv.org/abs/2609.35345
 
 The models depend on different, often incompatible versions of `torch` and
 `transformers`, so each model family gets its own conda environment. Every

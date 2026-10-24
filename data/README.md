@@ -1,7 +1,6 @@
 # Benchmark metadata
 
-**Paper:** https://arxiv.org/abs/XXXX.XXXXX (placeholder) ·
-**Dataset:** https://huggingface.co/datasets/ORG/alm-sounding-actions (placeholder)
+**Paper:** https://arxiv.org/abs/2609.35345
 
 All files are tab-separated. List-valued columns hold labels separated by `|`
 and are empty when the list is empty. `sounding_actions.load_benchmark()` and
