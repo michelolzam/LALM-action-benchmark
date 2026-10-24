@@ -1,0 +1,2 @@
+# Gemini 2.0 Flash(-Lite) and 2.5 Flash(-Lite), through the Gemini API: versions used for the paper.
+google-genai==1.52.0

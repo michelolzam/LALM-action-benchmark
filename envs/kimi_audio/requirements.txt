@@ -1,0 +1,9 @@
+# Kimi-Audio-7B-Instruct: versions used for the paper (they override the pins of
+# the Kimi-Audio repository, which are installed by setup.sh).
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch==2.7.1+cu118
+torchaudio==2.7.1+cu118
+torchvision==0.22.1+cu118
+transformers==4.54.1
+deepspeed==0.16.9
+numpy==1.26.0

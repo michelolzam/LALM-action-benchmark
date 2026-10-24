@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: alm-sounding-actions
+Version: 1.0.0
+Summary: Rebuild the sounding-actions benchmark for audio-language models from Ego4D and Ego-Exo4D
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: numpy<2.0,>=1.23
+Requires-Dist: pandas<3.0,>=2.0
+Requires-Dist: soundfile>=0.12
+Requires-Dist: tqdm>=4.66
+Provides-Extra: construction
+Requires-Dist: torch==2.8.0; extra == "construction"
+Requires-Dist: torchaudio==2.8.0; extra == "construction"
+Requires-Dist: transformers==4.56.0; extra == "construction"
+Requires-Dist: msclap==1.3.4; extra == "construction"

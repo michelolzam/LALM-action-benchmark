@@ -1,0 +1,13 @@
+# Environment to rebuild the benchmark audio (scripts/build_benchmark.py).
+#   conda env create -f environment.yml && conda activate sounding-actions
+# To also re-run the construction pipeline: pip install -e ".[construction]"
+name: sounding-actions
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - ffmpeg=6.1  # the benchmark was verified with ffmpeg 6.1.1
+  - pip
+  - pip:
+      - -e .
+      - ego4d  # official Ego4D / Ego-Exo4D downloaders (`ego4d`, `egoexo`)

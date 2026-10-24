@@ -1,0 +1,5 @@
+# Gemma-4-E4B-it (vLLM, with the E4B-it-assistant checkpoint for speculative decoding): versions used for the paper.
+vllm==0.21.0
+transformers==5.8.1
+librosa==0.11.0
+soundfile

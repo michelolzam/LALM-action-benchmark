@@ -1,0 +1,9 @@
+# Qwen2-Audio-7B-Instruct: versions used for the paper.
+torch==2.7.1
+torchaudio==2.7.1
+torchvision==0.22.1
+transformers @ git+https://github.com/huggingface/transformers@b727c2b20e5784c4d6245bcd6903d298e0e89478
+accelerate==1.9.0
+librosa==0.11.0
+soundfile==0.13.1
+numpy==1.26.4

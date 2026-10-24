@@ -1,0 +1,11 @@
+# Qwen3-Omni-30B-A3B-Instruct and Qwen3-Omni-30B-A3B-Captioner (transformers): versions used for the paper.
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.5.1+cu121
+torchaudio==2.5.1
+torchvision==0.20.1+cu121
+transformers @ git+https://github.com/huggingface/transformers@7bbfc19a4583d951eaec058cf467e81e6c97ee32
+accelerate==1.10.1
+qwen-omni-utils==0.0.8
+librosa==0.11.0
+soundfile
+numpy==2.0.1

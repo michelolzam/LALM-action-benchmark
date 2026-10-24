@@ -1,0 +1,197 @@
+--- a/src/mimo_audio/mimo_audio.py
++++ b/src/mimo_audio/mimo_audio.py
+@@ -40,6 +40,7 @@
+         model_path: str,
+         mimo_audio_tokenizer_path: str,
+         device: str | None = None,
++        temperature_mode: str = 'default'
+     ) -> None:
+         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+         
+@@ -105,42 +106,72 @@
+             f"Model loaded in {time.monotonic() - start_loading_time:.2f} seconds, device: {self.device}"
+         )
+ 
++        # Default temperatures
++        if temperature_mode == 'default':
++            temperature_sampler_global=0.6
++            temperature_sampler_local=0.9
++            temperature_asr_global = 1.0
++            temperature_asr_local = 0.9
++            temperature_tts_global=0.6
++            temperature_tts_local=0.9
++            temperature_spoken_dialogue_global=0.6
++            temperature_spoken_dialogue_local=0.9
++            temperature_audio_understanding_global=0.3
++            temperature_audio_understanding_local=0.3
++            temperature_text_chat_global=0.4
++            temperature_text_chat_local=0.9
++            temperature_in_context_learning_s2s_global=1.0
++            temperature_in_context_learning_s2s_local=0.9
++        elif temperature_mode == 'lowest':
++            temperature_asr_global=0.0
++            temperature_asr_local = 0.0
++            temperature_tts_global=0.0
++            temperature_tts_local=0.0
++            temperature_spoken_dialogue_global=0.0
++            temperature_spoken_dialogue_local=0.0
++            temperature_audio_understanding_global=0.0
++            temperature_audio_understanding_local=0.0
++            temperature_text_chat_global=0.0
++            temperature_text_chat_local=0.0
++            temperature_in_context_learning_s2s_global=0.0
++            temperature_in_context_learning_s2s_local=0.0
++
+         self.generate_kwargs = {
+             "max_length": 8192,
+             "eos_token_id": self.tokenizer.eos_token_id,
+             "pad_token_id": self.tokenizer.pad_token_id,
+         }
+         self.default_global_sampler = MiMoSampler(
+-            do_sample=True, temperature=0.6, top_k=50, top_p=0.95
++            do_sample=True, temperature=temperature_sampler_global, top_k=50, top_p=0.95
+         )
+         self.default_local_sampler = MiMoSampler(
+-            do_sample=True, temperature=0.9, top_k=50, top_p=0.95
++            do_sample=True, temperature=temperature_sampler_local, top_k=50, top_p=0.95
+         )
+         
+         self.task_sampler_configs = {
+             "asr": {
+-                "global": MiMoSampler(do_sample=False, temperature=1.0, top_p=1.0),
+-                "local": MiMoSampler(do_sample=True, temperature=0.9, top_p=0.95)
++                "global": MiMoSampler(do_sample=False, temperature=temperature_asr_global, top_p=1.0),
++                "local": MiMoSampler(do_sample=True, temperature=temperature_asr_local, top_p=0.95)
+             },
+             "tts": {
+-                "global": MiMoSampler(do_sample=True, temperature=0.6, top_p=1.0),
+-                "local": MiMoSampler(do_sample=True, temperature=0.9, top_p=0.95)
++                "global": MiMoSampler(do_sample=True, temperature=temperature_tts_global, top_p=1.0),
++                "local": MiMoSampler(do_sample=True, temperature=temperature_tts_local, top_p=0.95)
+             },
+             "spoken_dialogue": {
+-                "global": MiMoSampler(do_sample=True, temperature=0.6, top_p=0.95),
+-                "local": MiMoSampler(do_sample=True, temperature=0.9, top_p=0.95)
++                "global": MiMoSampler(do_sample=True, temperature=temperature_spoken_dialogue_global, top_p=0.95),
++                "local": MiMoSampler(do_sample=True, temperature=temperature_spoken_dialogue_local, top_p=0.95)
+             },
+             "audio_understanding": {
+-                "global": MiMoSampler(do_sample=True, temperature=0.3, top_p=0.95),
+-                "local": MiMoSampler(do_sample=True, temperature=0.9, top_p=0.95)
++                "global": MiMoSampler(do_sample=True, temperature=temperature_audio_understanding_global, top_p=0.95),
++                "local": MiMoSampler(do_sample=True, temperature=temperature_audio_understanding_local, top_p=0.95)
+             },
+             "text_chat": {
+-                "global": MiMoSampler(do_sample=True, temperature=0.4, top_p=0.95),
+-                "local": MiMoSampler(do_sample=True, temperature=0.9, top_p=0.95)
++                "global": MiMoSampler(do_sample=True, temperature=temperature_text_chat_global, top_p=0.95),
++                "local": MiMoSampler(do_sample=True, temperature=temperature_text_chat_local, top_p=0.95)
+             },
+             "in_context_learning_s2s": {
+-                "global": MiMoSampler(do_sample=False, temperature=1.0, top_p=1.0),
+-                "local": MiMoSampler(do_sample=True, temperature=0.9, top_p=0.95)
++                "global": MiMoSampler(do_sample=False, temperature=temperature_in_context_learning_s2s_global, top_p=1.0),
++                "local": MiMoSampler(do_sample=True, temperature=temperature_in_context_learning_s2s_local, top_p=0.95)
+             },
+         }
+ 
+@@ -1106,7 +1137,7 @@
+ 
+         text = generated_ids[0, ::self.group_size][:-1]
+         detokenized_text = self.tokenizer.decode(text, skip_special_tokens=False).strip().replace("<|empty|>", "").replace("<|eot|>", "").replace("<|eostm|>", "")
+-        print("Text channel:\t", detokenized_text)
++        # print("Text channel:\t", detokenized_text)
+ 
+         if output_audio_path:
+             return_audio = True
+@@ -1185,19 +1216,42 @@
+         text_output = self.forward(input_ids, output_audio_path=output_path, stopping_criteria=stopping_criteria, task_name="tts")
+         return text_output
+ 
+-    def audio_understanding_sft(self, input_speech, input_text, thinking=False):
++    def audio_understanding_sft(self,
++                                input_speech,
++                                input_text,
++                                thinking=False,
++                                max_length=None,
++                                max_new_tokens=8192,
++                                add_history=False
++                            ):
+         stopping_criteria = [
+             MiMoStopper(
+                 stop_tokens=[self.tokenizer.eos_token_id, self.im_end_idx],
+                 group_size=self.group_size,
+                 audio_channels=self.audio_channels,
++                max_length=max_length
+                 )
+             ]
+         input_ids = self.get_audio_understanding_sft_prompt(input_speech, input_text, thinking=thinking)
+-        result = self.forward(input_ids, stopping_criteria=stopping_criteria, task_name="audio_understanding")
++        
++        
++        
++        result = self.forward(
++            input_ids,
++            stopping_criteria=stopping_criteria,
++            task_name="audio_understanding",
++            max_new_tokens=max_new_tokens,
++            add_history=add_history
++        )
+         return result
+     
+-    def spoken_dialogue_sft(self, input_speech, output_audio_path=None, system_prompt=None, prompt_speech=None, add_history=False):
++    def spoken_dialogue_sft(self,
++                            input_speech,
++                            output_audio_path=None,
++                            system_prompt=None,
++                            prompt_speech=None,
++                            add_history=False
++                            ):
+         stopping_criteria = [
+             MiMoStopper(
+                 stop_tokens=[self.tokenizer.eos_token_id, self.eostm_idx, self.im_end_idx],
+@@ -1223,7 +1277,7 @@
+         return text
+     
+     
+-    def speech2text_dialogue_sft(self, input_speech, thinking=False, add_history=False):
++    def speech2text_dialogue_sft(self, input_speech, thinking=False, add_history=False, max_new_tokens=8192):
+         stopping_criteria = [
+             MiMoStopper(
+                 stop_tokens=[self.tokenizer.eos_token_id, self.im_end_idx],
+@@ -1232,7 +1286,7 @@
+             )
+         ]
+         input_ids = self.get_s2t_dialogue_sft_prompt(input_speech, thinking=thinking)
+-        text = self.forward(input_ids, stopping_criteria=stopping_criteria, task_name="spoken_dialogue", add_history=add_history)
++        text = self.forward(input_ids, stopping_criteria=stopping_criteria, task_name="spoken_dialogue", add_history=add_history, max_new_tokens=max_new_tokens)
+         return text
+ 
+ 
+@@ -1249,7 +1303,7 @@
+         text = self.forward(input_ids, stopping_criteria=stopping_criteria, task_name="spoken_dialogue", add_history=False)
+         return text
+     
+-    def text_dialogue_sft(self, input_text, thinking=False, add_history=False):
++    def text_dialogue_sft(self, input_text, thinking=False, add_history=False, max_new_tokens=8192):
+         stopping_criteria = [
+             MiMoStopper(
+                 stop_tokens=[self.tokenizer.eos_token_id, self.im_end_idx],
+@@ -1258,7 +1312,7 @@
+             )
+         ]
+         input_ids = self.get_text_dialogue_sft_prompt(input_text, thinking=thinking)
+-        text = self.forward(input_ids, stopping_criteria=stopping_criteria, task_name="text_chat", add_history=add_history)
++        text = self.forward(input_ids, stopping_criteria=stopping_criteria, task_name="text_chat", add_history=add_history, max_new_tokens=max_new_tokens)
+         return text
+ 
+     # interface for message list interaction
+@@ -1276,7 +1330,7 @@
+ 
+     def clear_history(self):
+         self.history = None
+-        print("History cleared")
++        # print("History cleared")
+     
+     def in_context_learning_s2s(self, instruction, prompt_examples, audio, max_new_tokens=None, output_audio_path=None):   
+         stopping_criteria = [

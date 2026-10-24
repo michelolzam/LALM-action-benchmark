@@ -1,0 +1,9 @@
+# Qwen2.5-Omni-3B and Qwen2.5-Omni-7B: versions used for the paper.
+torch==2.8.0
+torchvision==0.23.0
+transformers @ git+https://github.com/huggingface/transformers@cb39f7dd5ba874ee1859b47283b08cd3a6ab5a0d
+accelerate==1.10.1
+qwen-omni-utils[decord]==0.0.8
+librosa==0.11.0
+soundfile==0.13.1
+numpy==1.26.4
