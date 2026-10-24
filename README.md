@@ -1,11 +1,9 @@
 # Probing Large Audio-Language Models for Compositional Understanding of Sounding Actions
 
 [![Paper](https://img.shields.io/badge/arXiv-2609.35345-b31b1b.svg)](https://arxiv.org/abs/2609.35345)
-[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-dataset-yellow)](https://huggingface.co/datasets/ORG/alm-sounding-actions)
 [![Website](https://img.shields.io/badge/companion-website-blue)](https://alm-sounding-actions.onrender.com/)
 
-**Paper:** https://arxiv.org/abs/XXXX.XXXXX (placeholder) ·
-**Dataset:** https://huggingface.co/datasets/ORG/alm-sounding-actions (placeholder) ·
+**Paper:** https://arxiv.org/abs/2609.35345 (placeholder) ·
 **Website:** https://alm-sounding-actions.onrender.com/
 
 This repository rebuilds the benchmark of the paper from the original
